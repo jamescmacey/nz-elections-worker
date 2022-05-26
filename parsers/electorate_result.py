@@ -2,11 +2,13 @@
 electorate_result.py
 Created:     25 May 2022
 Author:      James Macey
-Description: Class and parser for Election.
+Description: Class and parser for ElectorateResult.
 """
 
 from datetime import datetime
 from bs4 import BeautifulSoup
+
+from parsers.voting_place_result import VotingPlaceResult
 from .candidate_votes import CandidateVotes
 from .soft_type_conversions import sint
 
@@ -15,6 +17,7 @@ class ElectorateResult:
     is_final: bool = None
     id: int = None
     candidate_votes: CandidateVotes = None
+    voting_place_results = []
 
     total_voting_places: int = None
     total_voting_places_counted: int = None

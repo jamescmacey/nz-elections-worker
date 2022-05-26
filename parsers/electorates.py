@@ -1,5 +1,5 @@
 """
-electorate.py
+electorates.py
 Created:     25 May 2022
 Author:      James Macey
 Description: Class and parser for Electorate.
