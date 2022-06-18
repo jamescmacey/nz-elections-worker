@@ -13,7 +13,6 @@ from .soft_type_conversions import sint
 
 class VotingPlaceResult:
     updated: datetime = None
-    received: datetime = None
     id: int = None
     physical_electorate_id: int = None
     electorate_id: int = None
@@ -39,4 +38,17 @@ class VotingPlaceResult:
         
         self.candidate_votes = CandidateVotes(votingplace.find("candidatevotes"))
 
+    def as_dict(self) -> dict:
+        return {
+            "_id": f"{self.electorate_id}_{self.voting_place_id}",
+            "id": self.id,
+            "updated": self.updated,
+            "physical_electorate_id": self.physical_electorate_id,
+            "electorate_id": self.electorate_id,
+            "voting_place_id": self.voting_place_id,
+            "candidate_votes": self.candidate_votes.as_dict(),
+            "total_issued_ballot_papers": self.total_issued_ballot_papers,
+            "total_party_informals": self.total_party_informals,
+            "total_candidate_informals": self.total_candidate_informals
+        }
 

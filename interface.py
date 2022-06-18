@@ -41,7 +41,7 @@ def get(url: str, retry_count: int = 0 ):
         sleep(RETRY_COOLDOWN)
         return get(url, retry_count = (retry_count+1))
 
-def get_file(url: str, parser: str = "xml"):
+def get_file(url: str, parser: str = "xml") -> BeautifulSoup:
     valid = ["html", "xml"]
     if parser not in valid:
         raise ValueError(f"get_file: parser must be one of {valid}")
@@ -50,6 +50,16 @@ def get_file(url: str, parser: str = "xml"):
         save_file(url, r.text, parser)
     bs_parser = {"xml":"xml","html":"html.parser"}[parser]
     return BeautifulSoup(r.text, bs_parser)
+
+def load_file(filename: str, parser: str = "xml") -> BeautifulSoup:
+    filename = SNAPSHOTS_DIR + "/" + filename
+    valid = ["html", "xml"]
+    if parser not in valid:
+        raise ValueError(f"load_file: parser must be one of {valid}")
+    bs_parser = {"xml":"xml","html":"html.parser"}[parser]
+    with open(filename) as f:
+        soup = BeautifulSoup(f, bs_parser)
+    return soup
 
 def get_electorate(electorate_id: int):
     id_str = f'{electorate_id:02d}'
@@ -74,4 +84,3 @@ def get_staticfile(name: str):
         raise ValueError(f"get_staticfile: name must be one of {valid}")
     url = assemble_url(f'{name}.xml')
     return get_file(url)
-

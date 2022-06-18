@@ -29,9 +29,22 @@ class Candidate:
         if self.list_pos == 0:
             self.list_pos = None
 
+    def as_dict(self) -> dict:
+        return {
+            "_id": self.id,
+            "id": self.id,
+            "name": self.name,
+            "electorate_id": self.electorate_id,
+            "party_id": self.party_id,
+            "list_pos": self.list_pos
+        }
+
 
 class Candidates(list):
     def __init__(self, soup: BeautifulSoup):
         candidates = soup.find_all("candidate")
         for c in candidates:
             self.append(Candidate(c))
+
+    def as_dict(self) -> list:
+        return [x.as_dict() for x in self]

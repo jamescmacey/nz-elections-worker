@@ -51,4 +51,21 @@ class ElectorateResult:
         
         self.candidate_votes = CandidateVotes(electorate.find("candidatevotes"))
 
-
+    def as_dict(self) -> dict: 
+        return {
+            "_id": self.id,
+            "is_final": self.is_final,
+            "updated": self.updated,
+            "candidate_votes": self.candidate_votes.as_dict(),
+            "voting_place_results": [x.as_dict() for x in self.voting_place_results],
+            "total_voting_places": self.total_voting_places,
+            "total_voting_places_counted": self.total_voting_places_counted,
+            "percent_voting_places_counted": self.percent_voting_places_counted,
+            "total_votes_cast": self.total_votes_cast,
+            "percent_votes_cast": self.percent_votes_cast,
+            "total_party_informals": self.total_party_informals,
+            "total_candidate_informals": self.total_candidate_informals,
+            "total_registered_parties": self.total_registered_parties,
+            "total_candidates": self.total_candidates
+        }
+    

@@ -33,3 +33,17 @@ class Election:
         self.total_minimal_votes = int(statistics.find("total_minimal_votes").text)
         self.total_special_votes = int(statistics.find("total_special_votes").text)
         self.total_registered_parties = int(statistics.find("total_registered_parties").text)
+
+    def as_dict(self) -> dict:
+        return {
+            "updated": self.updated,
+            "total_voting_places_counted": self.total_voting_places_counted,
+            "percent_voting_places_counted": self.percent_voting_places_counted,
+            "total_votes_cast": self.total_votes_cast,
+            "percent_votes_cast": self.percent_votes_cast,
+            "total_electorates_final": self.total_electorates_final,
+            "percent_electorates_final": self.percent_electorates_final,
+            "total_minimal_votes": self.total_minimal_votes,
+            "total_special_votes": self.total_special_votes,
+            "total_registered_parties": self.total_registered_parties,
+        }

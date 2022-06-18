@@ -26,9 +26,22 @@ class Party:
         elif registered == "no":
             self.registered = False
 
+    def as_dict(self) -> dict:
+        return {
+            "_id": self.id,
+            "id": self.id,
+            "name": self.name,
+            "short_name": self.short_name,
+            "abbreviation": self.abbreviation,
+            "registered": self.registered
+        }
+
 
 class Parties(list):
     def __init__(self, soup: BeautifulSoup):
         parties = soup.find_all("party")
         for p in parties:
             self.append(Party(p))
+
+    def as_dict(self) -> list:
+        return [x.as_dict() for x in self]

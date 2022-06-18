@@ -17,6 +17,14 @@ class ElectorateVotingPlace:
         self.electorate_id = int(filename[0:2])
         self.physical_electorate_id = int(filename[3:5])
         self.voting_place_id = int(filename[5:8])
+
+    def as_dict(self) -> dict:
+        return {
+            "_id": f"{self.electorate_id}_{self.voting_place_id}",
+            "electorate_id": self.electorate_id,
+            "physical_electorate_id": self.physical_electorate_id,
+            "voting_place_id": self.voting_place_id
+        }
         
 
 
@@ -29,3 +37,6 @@ class ElectorateVotingPlaces(list):
             if link and link.text.strip().endswith(".xml") and link.text.strip() not in already_done:
                 already_done.append(link.text.strip())
                 self.append(ElectorateVotingPlace(link.text.strip()))
+
+    def as_dict(self) -> dict:
+        return [x.as_dict() for x in self]
