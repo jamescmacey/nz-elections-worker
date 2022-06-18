@@ -1,7 +1,7 @@
 # Elections worker
 This repository contains the code for a worker to fetch and store election results from the New Zealand Electoral Commission's XML feed(s). It is primarily intended for use on election night.
 
-This tool is very much still a work in progress.
+This tool is very much still a work in progress: most notably, it does not have support for party votes, so cannot yet be used for general elections. However, it should still be adequate for by-elections.
 
 ## Missing functionality / issues
 * Party votes are not yet supported at all (this tool was developed in a rush, for the Tauranga by-election)

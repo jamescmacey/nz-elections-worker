@@ -21,7 +21,7 @@ SLEEP_PERIOD = 30
 # (each time a file is downloaded, save it to the disk;
 # this is useful for debugging)
 SNAPSHOTS = True
-SNAPSHOTS_DIR = "snapshots"
+SNAPSHOTS_DIR = "byelection"
 if SNAPSHOTS:
     from os import path, makedirs
     if not path.isdir(SNAPSHOTS_DIR):
@@ -38,3 +38,12 @@ MAX_RETRIES = 3
 # Retry cooldown (seconds)
 # (if a request error happens, how many seconds to wait)
 RETRY_COOLDOWN = 5
+
+# Use MongoDB
+# Whether or not the worker should interface with MongoDB
+USE_MONGODB = True
+
+# MongoDB Database
+# The MongoDB database to use. 
+# You should have your MongoDB connection string stored as MONGO_CONNECTION in secrets.py.
+MONGO_DATABASE = "2022-tga-by-prod"

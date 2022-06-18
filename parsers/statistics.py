@@ -26,3 +26,14 @@ class Statistics:
         self.total_candidates = int(statistics.find("total_candidates").text)
         self.total_voting_places = int(statistics.find("total_voting_places").text)
         self.total_electors = int(statistics.find("total_electors").text)
+
+    def as_dict(self) -> dict:
+        return {
+            "updated": self.updated,
+            "total_registered_parties": self.total_registered_parties,
+            "total_all_parties": self.total_all_parties,
+            "total_electorates": self.total_electorates,
+            "total_candidates": self.total_candidates,
+            "total_voting_places": self.total_voting_places,
+            "total_electors": self.total_electors,
+        }

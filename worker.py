@@ -5,7 +5,7 @@ Author:      James Macey
 Description: Entry point. Runnable.
 """
 
-from config import SLEEP_PERIOD
+from config import SLEEP_PERIOD, USE_MONGODB
 from interface import get_electorate, get_electorate_voting_places, get_staticfile, get_votingplace
 from parsers.candidates import Candidates
 from parsers.election import Election
@@ -17,6 +17,8 @@ from parsers.electorate_result import ElectorateResult
 from parsers.electorate_voting_places import ElectorateVotingPlaces
 from parsers.voting_place_result import VotingPlaceResult
 from time import sleep
+
+from utils import set_candidates, set_electorate_results, set_voting_places, set_election, set_electorates, set_parties, set_statistics
 
 def get_all_electorate_results(electorates: Electorates):
     electorate_results = []
@@ -60,6 +62,7 @@ def update_electorates(electorates):
     electorate_results = get_all_electorate_results(electorates)
     for result in electorate_results:
         voting_places = ElectorateVotingPlaces(get_electorate_voting_places(result.id))
+        result.voting_place_results = []
         for voting_place in voting_places:
             result.voting_place_results.append(VotingPlaceResult(get_votingplace(voting_place.electorate_id, voting_place.physical_electorate_id, voting_place.voting_place_id)))
     return electorate_results
@@ -75,13 +78,16 @@ voting_places = VotingPlaces(get_staticfile("votingplaces"))
 
 election = Election(get_staticfile("election"))
 electorate_results = update_electorates(electorates)
-results_printout(candidates, electorates, parties, electorate_results, 52)
+#results_printout(candidates, electorates, parties, electorate_results, 52)
 
-### 
-###
-### [ upload to intermediary database / website backend ]
-###
-###
+if USE_MONGODB:
+    set_candidates(candidates)
+    set_electorates(electorates)
+    set_statistics(statistics)
+    set_parties(parties)
+    set_voting_places(voting_places)
+    set_election(election)
+    set_electorate_results(electorate_results)
 
 
 # Start the infinite loop.
@@ -92,11 +98,8 @@ while True:
         election = new_election
         electorate_results = update_electorates(electorates)
 
-        ### 
-        ###
-        ### [ upload results to intermediary database / website backend ]
-        ###
-        ###
+        set_electorate_results(electorate_results)
+        set_election(election)
         
-        results_printout(candidates, electorates, parties, electorate_results, 52)
+        #results_printout(candidates, electorates, parties, electorate_results, 52)
 

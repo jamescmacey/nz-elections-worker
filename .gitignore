@@ -1,5 +1,7 @@
 # Elections worker
 snapshots/
+secrets.py
+demo.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

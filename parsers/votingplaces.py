@@ -25,9 +25,22 @@ class VotingPlace:
         except ValueError:
             pass
 
+    def as_dict(self) -> dict:
+        return {
+            "_id": self.id,
+            "id": self.id,
+            "physical_electorate_id": self.id,
+            "address": self.address,
+            "longitude": self.longitude,
+            "latitude": self.latitude
+        }
+
 
 class VotingPlaces(list):
     def __init__(self, soup: BeautifulSoup):
         places = soup.find_all("votingplace")
         for vp in places:
             self.append(VotingPlace(vp))
+
+    def as_dict(self) -> list:
+        return [x.as_dict() for x in self]
