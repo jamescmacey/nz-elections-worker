@@ -11,11 +11,12 @@ USER_AGENT = "Mozilla/5.0 (compatible; WhereTheyStandElectionsWorker/0.1; +https
 # Base URL
 # (see MFTD Chapter 6 for fall-back URLs)
 # [must include the trailing slash]
-BASE_URL = "https://media.election.net.nz/xml/"
+#BASE_URL = "https://media.election.net.nz/xml/"
+BASE_URL = "https://electionresults.govt.nz/2022_hamilton_west_byelection/xml/"
 
 # Sleep period (seconds)
 # (sleep period between checking election.xml file)
-SLEEP_PERIOD = 30
+SLEEP_PERIOD = 1800
 
 # Snapshots
 # (each time a file is downloaded, save it to the disk;
@@ -46,4 +47,4 @@ USE_MONGODB = True
 # MongoDB Database
 # The MongoDB database to use. 
 # You should have your MongoDB connection string stored as MONGO_CONNECTION in secrets.py.
-MONGO_DATABASE = "2022-tga-by-prod"
+MONGO_DATABASE = "2022-ham-west-by-prod"
