@@ -29,6 +29,7 @@ def get(url: str, retry_count: int = 0 ):
     }
 
     try:
+        print("GET",url)
         r = preqs.get(
             url,
             headers = headers,

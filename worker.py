@@ -70,13 +70,18 @@ def update_electorates(electorates):
 
 # Populate staticfiles
 # This only happens once.
-candidates = Candidates(get_staticfile("candidates"))
-electorates = Electorates(get_staticfile("electorates"))
-statistics = Statistics(get_staticfile("statistics"))
-parties = Parties(get_staticfile("parties"))
-voting_places = VotingPlaces(get_staticfile("votingplaces"))
+while True:
+    try:
+        candidates = Candidates(get_staticfile("candidates"))
+        electorates = Electorates(get_staticfile("electorates"))
+        statistics = Statistics(get_staticfile("statistics"))
+        parties = Parties(get_staticfile("parties"))
+        voting_places = VotingPlaces(get_staticfile("votingplaces"))
 
-election = Election(get_staticfile("election"))
+        election = Election(get_staticfile("election"))
+        break
+    except:
+        sleep(SLEEP_PERIOD)
 electorate_results = update_electorates(electorates)
 #results_printout(candidates, electorates, parties, electorate_results, 52)
 
