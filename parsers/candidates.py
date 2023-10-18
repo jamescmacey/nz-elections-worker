@@ -5,46 +5,32 @@ Author:      James Macey
 Description: Class and parser for Candidate.
 """
 
-from datetime import datetime
-from bs4.element import Tag
 from bs4 import BeautifulSoup
-
-class Candidate:
-    name: str = None
-    id: int = None
-    electorate_id: int = None
-    party_id: int = None
-    list_pos: int = None
-    def __init__(self, soup: Tag):
-        self.name = soup.find("candidate_name").text
-        self.id = int(soup.attrs["c_no"])
-        self.electorate_id = int(soup.find("electorate").text)
-        self.party_id = int(soup.find("party").text)
-        self.list_pos = int(soup.find("list_no").text)
-
-        if self.electorate_id == 0:
-            self.electorate_id = None
-        if self.party_id == 0:
-            self.party_id = None
-        if self.list_pos == 0:
-            self.list_pos = None
-
-    def as_dict(self) -> dict:
-        return {
-            "_id": self.id,
-            "id": self.id,
-            "name": self.name,
-            "electorate_id": self.electorate_id,
-            "party_id": self.party_id,
-            "list_pos": self.list_pos
-        }
-
+from .all import ElectionCandidate
+from config import EVENT_ID
 
 class Candidates(list):
-    def __init__(self, soup: BeautifulSoup):
+    def __init__(self, soup: BeautifulSoup=None, premade_candidates=[]):
+        if len(premade_candidates) > 0:
+            for premade in premade_candidates:
+                self.append(premade)
+            return
+        
+        if soup == None:
+            raise Exception("No soup provided to Candidates parser.")
+
         candidates = soup.find_all("candidate")
         for c in candidates:
-            self.append(Candidate(c))
+            self.append(
+                ElectionCandidate(
+                    event_id=EVENT_ID,
+                    name=c.find("candidate_name").text,
+                    candidate_id=int(c.attrs["c_no"]),
+                    electorate_id=(int(c.find("electorate").text) if int(c.find("electorate").text) != 0 else None),
+                    party_id=(int(c.find("party").text) if int(c.find("party").text) != 0 else None),
+                    list_pos=(int(c.find("list_no").text) if int(c.find("list_no").text) != 0 else None),
+                )
+            )
 
     def as_dict(self) -> list:
-        return [x.as_dict() for x in self]
+        return [x.__dict__ for x in self]

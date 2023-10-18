@@ -1,0 +1,13 @@
+<!ELEMENT parties (party)+>
+
+<!ELEMENT party (abbrev,short_name,party_name,registered)>
+<!ATTLIST party
+    p_no  CDATA #REQUIRED>
+
+<!ELEMENT abbrev (#PCDATA)>
+
+<!ELEMENT short_name (#PCDATA)>
+
+<!ELEMENT party_name (#PCDATA)>
+
+<!ELEMENT registered (#PCDATA)>

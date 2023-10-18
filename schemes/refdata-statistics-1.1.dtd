@@ -1,0 +1,17 @@
+<!ELEMENT statistics (total_registered_parties,total_all_parties,
+                      total_electorates,total_candidates,
+                      total_voting_places,total_electors)>
+<!ATTLIST statistics
+    updated CDATA #REQUIRED>
+
+<!ELEMENT total_registered_parties (#PCDATA)>
+
+<!ELEMENT total_all_parties (#PCDATA)>
+
+<!ELEMENT total_electorates (#PCDATA)>
+
+<!ELEMENT total_candidates (#PCDATA)>
+
+<!ELEMENT total_voting_places (#PCDATA)>
+
+<!ELEMENT total_electors (#PCDATA)>

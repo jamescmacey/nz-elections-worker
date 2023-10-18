@@ -1,0 +1,7 @@
+<!ELEMENT electorates (electorate)+>
+
+<!ELEMENT electorate (electorate_name)>
+<!ATTLIST electorate
+    e_no  CDATA #REQUIRED>
+
+<!ELEMENT electorate_name (#PCDATA)>

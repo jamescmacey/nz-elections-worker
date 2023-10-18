@@ -7,40 +7,30 @@ Description: Class and parser for VotingPlace.
 
 from bs4.element import Tag
 from bs4 import BeautifulSoup
-
-class VotingPlace:
-    id: int = None
-    physical_electorate_id: int = None
-    address: str = None
-    latitude: float = None
-    longitude: float = None
-
-    def __init__(self, soup: Tag):
-        self.id = int(soup.attrs["vp_id"])
-        self.physical_electorate_id = int(soup.attrs["vp_e_no"])
-        self.address = soup.find("vp_address").text
-        try:
-            self.latitude = float(soup.find("vp_lat").text)
-            self.longitude = float(soup.find("vp_lon").text)
-        except ValueError:
-            pass
-
-    def as_dict(self) -> dict:
-        return {
-            "_id": self.id,
-            "id": self.id,
-            "physical_electorate_id": self.id,
-            "address": self.address,
-            "longitude": self.longitude,
-            "latitude": self.latitude
-        }
-
+from .all import ElectionVotingPlace
+from config import EVENT_ID
 
 class VotingPlaces(list):
-    def __init__(self, soup: BeautifulSoup):
+    def __init__(self, soup: BeautifulSoup, event_id=None):
         places = soup.find_all("votingplace")
+        if not event_id:
+            event_id = EVENT_ID
         for vp in places:
-            self.append(VotingPlace(vp))
+            try:
+                lat = float(vp.find("vp_lat").text)
+                lon = float(vp.find("vp_lon").text)
+            except (ValueError, AttributeError):
+                lat = None
+                lon = None
+
+            self.append(ElectionVotingPlace(
+                event_id=event_id,
+                voting_place_id=int(vp.attrs["vp_id"]),
+                physical_electorate_id=int(vp.attrs["vp_e_no"]),
+                address=vp.find("vp_address").text,
+                latitude=lat,
+                longitude=lon
+            ))
 
     def as_dict(self) -> list:
-        return [x.as_dict() for x in self]
+        return [x.__dict__ for x in self]

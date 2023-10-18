@@ -1,0 +1,12 @@
+<!ELEMENT votingplaces (votingplace)+>
+
+<!ELEMENT votingplace (vp_address,vp_lat,vp_lon)>
+<!ATTLIST votingplace
+    vp_e_no  CDATA #REQUIRED
+    vp_id CDATA #REQUIRED>
+
+<!ELEMENT vp_address (#PCDATA)>
+
+<!ELEMENT vp_lat (#PCDATA)>
+
+<!ELEMENT vp_lon (#PCDATA)>

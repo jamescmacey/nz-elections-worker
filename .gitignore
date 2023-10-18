@@ -1,7 +1,25 @@
 # Elections worker
 snapshots/
 secrets.py
+secret.py
 demo.py
+demo2.py
+demo3.py
+
+.DS_Store
+
+# Files
+by18/
+by22a/
+by22b/
+ge17/
+ge20/
+ge20_1/
+ge20_2/
+ge20_3/
+snaps/
+explore/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

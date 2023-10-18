@@ -1,0 +1,32 @@
+<!ELEMENT votingplace (time_received,statistics,partyvotes,candidatevotes)>
+<!ATTLIST votingplace
+    vp_id   CDATA #REQUIRED
+    vp_e_no CDATA #REQUIRED
+    e_no    CDATA #REQUIRED
+    vp_no   CDATA #REQUIRED
+    updated CDATA #REQUIRED>
+
+<!ELEMENT time_received (#PCDATA)>
+
+<!ELEMENT statistics (total_issued_ballot_papers,total_party_informals,
+                      total_candidate_informals)>
+
+<!ELEMENT partyvotes (party)+>
+
+<!ELEMENT candidatevotes (candidate)+>
+
+<!ELEMENT total_issued_ballot_papers (#PCDATA)>
+
+<!ELEMENT total_party_informals (#PCDATA)>
+
+<!ELEMENT total_candidate_informals (#PCDATA)>
+
+<!ELEMENT party (votes)>
+<!ATTLIST party
+    p_no  CDATA #REQUIRED>
+
+<!ELEMENT candidate (votes)>
+<!ATTLIST candidate
+    c_no  CDATA #REQUIRED>
+
+<!ELEMENT votes (#PCDATA)>
