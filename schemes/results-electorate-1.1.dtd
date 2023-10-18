@@ -1,0 +1,43 @@
+<!ELEMENT electorate (statistics,partyvotes,candidatevotes)>
+<!ATTLIST electorate
+    e_no    CDATA #REQUIRED
+    final   CDATA #REQUIRED
+    updated CDATA #REQUIRED>
+
+<!ELEMENT statistics (total_voting_places,total_voting_places_counted,
+                      percent_voting_places_counted,total_votes_cast,
+                      percent_votes_cast,total_party_informals,
+                      total_candidate_informals,total_registered_parties,
+                      total_candidates)>
+
+<!ELEMENT partyvotes (party)+>
+
+<!ELEMENT candidatevotes (candidate)+>
+
+<!ELEMENT total_voting_places (#PCDATA)>
+
+<!ELEMENT total_voting_places_counted (#PCDATA)>
+
+<!ELEMENT percent_voting_places_counted (#PCDATA)>
+
+<!ELEMENT total_votes_cast (#PCDATA)>
+
+<!ELEMENT percent_votes_cast (#PCDATA)>
+
+<!ELEMENT total_party_informals (#PCDATA)>
+
+<!ELEMENT total_candidate_informals (#PCDATA)>
+
+<!ELEMENT total_registered_parties (#PCDATA)>
+
+<!ELEMENT total_candidates (#PCDATA)>
+
+<!ELEMENT party (votes)>
+<!ATTLIST party
+    p_no  CDATA #REQUIRED>
+
+<!ELEMENT candidate (votes)>
+<!ATTLIST candidate
+    c_no  CDATA #REQUIRED>
+
+<!ELEMENT votes (#PCDATA)>

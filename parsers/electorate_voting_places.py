@@ -5,7 +5,6 @@ Author:      James Macey
 Description: Class and parser for ElectorateVotingPlace.
 """
 
-from bs4.element import Tag
 from bs4 import BeautifulSoup
 
 class ElectorateVotingPlace:

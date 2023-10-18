@@ -1,0 +1,13 @@
+<!ELEMENT candidates (candidate)+>
+
+<!ELEMENT candidate (candidate_name,electorate,party,list_no)>
+<!ATTLIST candidate
+    c_no  CDATA #REQUIRED>
+
+<!ELEMENT candidate_name (#PCDATA)>
+
+<!ELEMENT electorate (#PCDATA)>
+
+<!ELEMENT party (#PCDATA)>
+
+<!ELEMENT list_no (#PCDATA)>

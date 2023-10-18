@@ -5,30 +5,27 @@ Author:      James Macey
 Description: Class and parser for Electorate.
 """
 
-from bs4.element import Tag
 from bs4 import BeautifulSoup
-
-class Electorate:
-    id: int = None
-    name: str = None
-
-    def __init__(self, soup: Tag):
-        self.id = int(soup.attrs["e_no"])
-        self.name = soup.find("electorate_name").text
-
-    def as_dict(self) -> dict:
-        return {
-            "_id": self.id,
-            "id": self.id,
-            "name": self.name
-        }
-
+from config import EVENT_ID
+from .all import ElectionElectorate
 
 class Electorates(list):
-    def __init__(self, soup: BeautifulSoup):
+    def __init__(self, soup: BeautifulSoup=None, premade_electorates=[]):
+        if len(premade_electorates) > 0:
+            for premade in premade_electorates:
+                self.append(premade)
+            return
+        
+        if soup == None:
+            raise Exception("No soup provided to Electorates parser.")
+
         electorates = soup.find_all("electorate")
         for e in electorates:
-            self.append(Electorate(e))
+            self.append(ElectionElectorate(
+                event_id=EVENT_ID,
+                electorate_id=int(e.attrs["e_no"]),
+                name=e.find("electorate_name").text
+            ))
     
     def as_dict(self) -> list:
-        return [x.as_dict() for x in self]
+        return [x.__dict__ for x in self]

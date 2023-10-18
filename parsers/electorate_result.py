@@ -6,17 +6,19 @@ Description: Class and parser for ElectorateResult.
 """
 
 from datetime import datetime
+import zoneinfo
 from bs4 import BeautifulSoup
+from config import EVENT_ID
+import typing
+from parsers.all import Result, ResultsSet, ResultsLevel, ResultsCategory, ResultsType, Statistics, ResultParsingMode
 
-from parsers.voting_place_result import VotingPlaceResult
-from .candidate_votes import CandidateVotes
 from .soft_type_conversions import sint
 
 class ElectorateResult:
     updated: datetime = None
+    parsed: datetime = None
     is_final: bool = None
     id: int = None
-    candidate_votes: CandidateVotes = None
     voting_place_results = []
 
     total_voting_places: int = None
@@ -29,10 +31,19 @@ class ElectorateResult:
     total_registered_parties: int = None
     total_candidates: int = None
 
-    def __init__(self, soup: BeautifulSoup):
+    candidate_results: typing.List[Result] = []
+    party_results: typing.List[Result] = []
+
+    premade_results_sets: typing.List[ResultsSet] = None
+
+    def __init__(self, soup: BeautifulSoup, premade_results_sets = None):
+        if premade_results_sets is not None:
+            self.premade_results_sets = premade_results_sets
+            return
         electorate = soup.find("electorate")
         self.id = int(electorate.attrs["e_no"])
-        self.updated = datetime.strptime(electorate.attrs["updated"], "%Y-%m-%dT%H:%M:%S")
+        self.parsed = datetime.now(zoneinfo.ZoneInfo("Pacific/Auckland"))
+        self.updated = datetime.strptime(electorate.attrs["updated"], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=zoneinfo.ZoneInfo("Pacific/Auckland"))
         is_final = electorate.attrs["final"]
         if is_final == "true":
             self.is_final = True
@@ -48,24 +59,68 @@ class ElectorateResult:
         self.total_candidate_informals = sint(electorate.find("total_candidate_informals").text)
         self.total_registered_parties = sint(electorate.find("total_registered_parties").text)
         self.total_candidates = sint(electorate.find("total_candidates").text)
-        
-        self.candidate_votes = CandidateVotes(electorate.find("candidatevotes"))
 
-    def as_dict(self) -> dict: 
-        return {
-            "_id": self.id,
-            "is_final": self.is_final,
-            "updated": self.updated,
-            "candidate_votes": self.candidate_votes.as_dict(),
-            "voting_place_results": [x.as_dict() for x in self.voting_place_results],
-            "total_voting_places": self.total_voting_places,
-            "total_voting_places_counted": self.total_voting_places_counted,
-            "percent_voting_places_counted": self.percent_voting_places_counted,
-            "total_votes_cast": self.total_votes_cast,
-            "percent_votes_cast": self.percent_votes_cast,
-            "total_party_informals": self.total_party_informals,
-            "total_candidate_informals": self.total_candidate_informals,
-            "total_registered_parties": self.total_registered_parties,
-            "total_candidates": self.total_candidates
-        }
-    
+        self.party_results = ResultsSet.parse_results(soup=electorate.find("partyvotes"), mode=ResultParsingMode.PARTY)
+        self.candidate_results = ResultsSet.parse_results(soup=electorate.find("candidatevotes"), mode=ResultParsingMode.CANDIDATE)
+        
+
+    def results_sets(self):
+        if self.premade_results_sets is not None:
+            return self.premade_results_sets
+
+        return [ResultsSet(
+            event_id=EVENT_ID,
+            name=None,
+            results_level=ResultsLevel.ELECTORATE,
+            results_type=ResultsType.ACTUAL,
+            results_category=ResultsCategory.PARTY_VOTES,
+            results=self.party_results,
+            informals=self.total_party_informals,
+            unknowns=None,
+            refused=None,
+            sample_size=self.total_party_informals + sum([x.count for x in self.party_results]),
+            updated=self.updated,
+            parsed=self.parsed,
+            updated_timestamp=self.updated.timestamp(),
+            parsed_timestamp=self.parsed.timestamp(),
+            electorate_id=self.id,
+            voting_place_id=None,
+            voting_place_no=None,
+            statistics=Statistics(
+                total_voting_places=self.total_voting_places,
+                total_voting_places_counted=self.total_voting_places_counted,
+                percent_voting_places_counted=self.percent_voting_places_counted,
+                total_registered_parties=self.total_registered_parties,
+                percent_votes_cast=self.percent_votes_cast,
+                total_votes_cast=self.total_votes_cast,
+            ),
+            is_final=self.is_final
+        ),
+        ResultsSet(
+            event_id=EVENT_ID,
+            name=None,
+            results_level=ResultsLevel.ELECTORATE,
+            results_type=ResultsType.ACTUAL,
+            results_category=ResultsCategory.CANDIDATE_VOTES,
+            results=self.candidate_results,
+            informals=self.total_candidate_informals,
+            unknowns=None,
+            refused=None,
+            sample_size=self.total_candidate_informals + sum([x.count for x in self.candidate_results]),
+            updated=self.updated,
+            parsed=self.parsed,
+            updated_timestamp=self.updated.timestamp(),
+            parsed_timestamp=self.parsed.timestamp(),
+            electorate_id=self.id,
+            voting_place_id=None,
+            voting_place_no=None,
+            statistics=Statistics(
+                total_voting_places=self.total_voting_places,
+                total_voting_places_counted=self.total_voting_places_counted,
+                percent_voting_places_counted=self.percent_voting_places_counted,
+                total_votes_cast=self.total_votes_cast,
+                percent_votes_cast=self.percent_votes_cast,
+                total_candidates=self.total_candidates,
+            ),
+            is_final=self.is_final
+        )] 

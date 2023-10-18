@@ -1,0 +1,45 @@
+<!ELEMENT election (statistics,partystatus)>
+<!ATTLIST election
+    updated CDATA #REQUIRED
+    >
+
+<!ELEMENT statistics (total_voting_places_counted,
+                      percent_voting_places_counted,total_votes_cast,
+                      percent_votes_cast,total_electorates_final,
+                      percent_electorates_final,total_minimal_votes,
+                      total_special_votes,total_registered_parties)>
+
+<!ELEMENT partystatus (party)+>
+
+<!ELEMENT total_voting_places_counted (#PCDATA)>
+
+<!ELEMENT percent_voting_places_counted (#PCDATA)>
+
+<!ELEMENT total_votes_cast (#PCDATA)>
+
+<!ELEMENT percent_votes_cast (#PCDATA)>
+
+<!ELEMENT total_electorates_final (#PCDATA)>
+
+<!ELEMENT percent_electorates_final (#PCDATA)>
+
+<!ELEMENT total_minimal_votes (#PCDATA)>
+
+<!ELEMENT total_special_votes (#PCDATA)>
+
+<!ELEMENT total_registered_parties (#PCDATA)>
+
+<!ELEMENT party (votes,percent_votes,party_seats,candidate_seats,total_seats)>
+<!ATTLIST party
+    p_no  CDATA #REQUIRED
+    >
+
+<!ELEMENT votes (#PCDATA)>
+
+<!ELEMENT percent_votes (#PCDATA)>
+
+<!ELEMENT party_seats (#PCDATA)>
+
+<!ELEMENT candidate_seats (#PCDATA)>
+
+<!ELEMENT total_seats (#PCDATA)>
